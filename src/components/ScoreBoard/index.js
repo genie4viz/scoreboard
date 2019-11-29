@@ -113,12 +113,12 @@ const ScoreBoard = ({ animations, info, colors, width, height }) => (
       id="cards"
       section="team-state"
       animations={animations}
-      info={{ text: "Red cards", text_sub: "0"}}
-      colors={{ rect: "#001236", text: "#9ed0d8", text1: "#fefefd"}}
+      info={{ text: "Red cards", text_next: "0"}}
+      colors={{ rect: "#001236", text: "#9ed0d8", text_next: "#fefefd"}}
       timeline={{
         rect: { delay: 150 * spd, duration: 200 * spd },
         text: { delay: 200 * spd, duration: 350 * spd },
-        text1: { delay: 200 * spd, duration: 350 * spd }
+        text_next: { delay: 200 * spd, duration: 350 * spd }
       }}
       rectWidth={W.card}
       rectHeight={height}

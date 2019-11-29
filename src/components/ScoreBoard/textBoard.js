@@ -40,13 +40,13 @@ export const TextBoard = ({
           .delay(timeline.rect.delay)
           .duration(timeline.rect.duration)
           .attr("x", 0)
-          .attr("width", rectWidth)
+          .attr("width", rectWidth);
       }
 
       if (textNode.empty()) {
-        textNode = gBoard
-          .append("text")
-          .attr("class", "text")
+        textNode = gBoard.append("text").attr("class", "text");
+
+        textNode
           .attr("x", () => {
             switch (expandDir) {
               case "left":
@@ -61,11 +61,9 @@ export const TextBoard = ({
           })
           .attr("y", rectHeight / 2)
           .attr("text-anchor", "middle")
-          .attr("alignment-baseline", "central")
-          .attr("font-weight", "bold")
+          .attr("font-weight", expandDir === "center" ? 1000 : "bold")
           .attr("font-size", expandDir === "center" ? 32 : 40)
           .attr("fill", colors.text)
-          .text(`${info.text}`)
           .attr("opacity", 0)
           .transition()
           .delay(timeline.text.delay)
@@ -77,7 +75,27 @@ export const TextBoard = ({
             expandDir === "right-with-image"
               ? (rectWidth - 90) * 0.5 + 90
               : rectWidth * 0.5
-          )
+          );
+
+        if (info.text_next) {          
+          textNode
+            .append("tspan")
+            .attr("dx", 0)
+            .attr("dy", rectHeight * 0.25)
+            .text(`${info.text}`);
+          textNode
+            .append("tspan")
+            .attr("dx", 10)
+            .attr("fill", colors.text_next)
+            .attr("font-size", 46)
+            .attr("font-weight", "1000")
+            .text(`${info.text_next}`);
+        } else {
+          textNode
+            .append("tspan")
+            .attr("dy", rectHeight * 0.25)
+            .text(`${info.text}`);
+        }
       }
       if (info.image && imgNode.empty()) {
         imgNode = gBoard
@@ -92,7 +110,7 @@ export const TextBoard = ({
           .transition()
           .delay(timeline.image.delay)
           .duration(timeline.image.duration)
-          .attr("opacity", 1)
+          .attr("opacity", 1);
 
         lineNode = gBoard
           .append("rect")
@@ -105,7 +123,7 @@ export const TextBoard = ({
           .transition()
           .delay(timeline.image.delay)
           .duration(timeline.image.duration)
-          .attr("opacity", 0.6)
+          .attr("opacity", 0.6);
       }
     } else {
       rectNode
@@ -120,7 +138,7 @@ export const TextBoard = ({
             ? rectWidth * 0.5
             : 0
         )
-        .attr("width", 0)
+        .attr("width", 0);
 
       textNode
         .transition()
@@ -134,20 +152,20 @@ export const TextBoard = ({
             : expandDir === "center"
             ? rectWidth * 0.5
             : rectWidth * 0.45
-        )
+        );
 
       if (info.image) {
         imgNode
           .transition()
           .delay(timeline.image.delay)
           .duration(timeline.image.duration)
-          .attr("opacity", 0)
+          .attr("opacity", 0);
 
         lineNode
           .transition()
           .delay(timeline.image.delay)
           .duration(timeline.image.duration)
-          .attr("opacity", 0)
+          .attr("opacity", 0);
       }
     }
   }, [
