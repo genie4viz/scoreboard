@@ -54,9 +54,9 @@ function App() {
     setAnims([]);
   }
   return (
-    <div style={{ width: '100wh', minHeight: "100vh", padding: 32, backgroundColor: '#ddd' }}>
+    <div style={{ width: '100wh', minHeight: "100vh", padding: 32, backgroundColor: '#333' }}>
       <button onClick={ChangeState}>Change State</button>
-      <ScoreBoard animations={anims} info={info} colors={colors} width={1110} height={70} />
+      <ScoreBoard animations={anims} info={info} colors={colors} width={1130} height={70} />
     </div>
   );
 }
