@@ -57,6 +57,8 @@ export const TextBoard = ({
                 return rectWidth * 0.45;
               case "right-with-image":
                 return (rectWidth - 90) * 0.4 + 90; //90 is logoRect width
+              default:
+                return;
             }
           })
           .attr("y", rectHeight / 2)

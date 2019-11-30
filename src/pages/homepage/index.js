@@ -1,29 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import ScoreBoard from "../../components/ScoreBoard";
 
 import team1_logo from "../../assets/logos/teaml.png";
 import team2_logo from "../../assets/logos/teamr.png";
 
 function App() {
-  const [anims, setAnims] = useState([]);
+  const [anims, setAnims] = useState({
+    main: 3000,
+    teamStat: 1000
+  });
 
-  const ChangeState = stat => {
-    switch (stat) {
-      case "hidden":
-        setAnims([]);
-        break;
-      case "main":
-        setAnims([{ animation: "main", delay: 0 }]);
-        break;
-      case "team-stat":
-        setAnims([
-          { animation: "main", delay: 0 },
-          { animation: "teamStat", delay: 0.6 }
-        ]);
-        break;
-      default:
-        return;
-    }
+  const ChangeState = () => {
+    setAnims([]); //hidden
   };
   return (
     <div
@@ -34,9 +22,7 @@ function App() {
         backgroundColor: "#333"
       }}
     >
-      <button onClick={() => ChangeState("hidden")}>Hidden</button>
-      <button onClick={() => ChangeState("main")}>Main</button>
-      <button onClick={() => ChangeState("team-stat")}>TeamStat</button>
+      <button onClick={ChangeState}>Change State</button>
       <br />
       <ScoreBoard
         animations={anims}
