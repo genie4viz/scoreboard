@@ -4,7 +4,7 @@ import * as d3 from "d3";
 export const TextBoard = ({
   id,
   section,
-  animations,
+  actions,
   info,
   colors,
   timeline,
@@ -20,7 +20,7 @@ export const TextBoard = ({
     let imgNode = gBoard.select(".logo");
     let lineNode = gBoard.select(".split");
 
-    if (animations.length !== 0) {
+    if (actions === "appear") {
       if (rectNode.empty()) {
         rectNode = gBoard
           .append("rect")
@@ -37,8 +37,8 @@ export const TextBoard = ({
           .attr("height", rectHeight)
           .attr("fill", colors.rect)
           .transition()
-          .delay(timeline.rect.delay)
-          .duration(timeline.rect.duration)
+          .delay(timeline.appear.rect.delay)
+          .duration(timeline.appear.rect.duration)
           .attr("x", 0)
           .attr("width", rectWidth);
       }
@@ -66,8 +66,8 @@ export const TextBoard = ({
           .attr("fill", colors.text)
           .attr("opacity", 0)
           .transition()
-          .delay(timeline.text.delay)
-          .duration(timeline.text.duration)
+          .delay(timeline.appear.text.delay)
+          .duration(timeline.appear.text.duration)
           .attr("opacity", 1)
           .attr("font-size", expandDir === "center" ? 46 : 40)
           .attr(
@@ -108,8 +108,8 @@ export const TextBoard = ({
           .attr("height", 50)
           .attr("opacity", 0)
           .transition()
-          .delay(timeline.image.delay)
-          .duration(timeline.image.duration)
+          .delay(timeline.appear.image.delay)
+          .duration(timeline.appear.image.duration)
           .attr("opacity", 1);
 
         lineNode = gBoard
@@ -121,15 +121,15 @@ export const TextBoard = ({
           .attr("fill", colors.line)
           .attr("opacity", 0)
           .transition()
-          .delay(timeline.image.delay)
-          .duration(timeline.image.duration)
+          .delay(timeline.appear.image.delay)
+          .duration(timeline.appear.image.duration)
           .attr("opacity", 0.6);
       }
     } else {
       rectNode
         .transition()
-        .delay(timeline.rect.delay)
-        .duration(timeline.rect.duration)
+        .delay(timeline.disappear.rect.delay)
+        .duration(timeline.disappear.rect.duration)
         .attr(
           "x",
           expandDir === "left"
@@ -142,8 +142,8 @@ export const TextBoard = ({
 
       textNode
         .transition()
-        .delay(timeline.rect.delay)
-        .duration(timeline.rect.duration)
+        .delay(timeline.disappear.rect.delay)
+        .duration(timeline.disappear.rect.duration)
         .attr("opacity", 0)
         .attr(
           "x",
@@ -157,21 +157,21 @@ export const TextBoard = ({
       if (info.image) {
         imgNode
           .transition()
-          .delay(timeline.image.delay)
-          .duration(timeline.image.duration)
+          .delay(timeline.disappear.image.delay)
+          .duration(timeline.disappear.image.duration)
           .attr("opacity", 0);
 
         lineNode
           .transition()
-          .delay(timeline.image.delay)
-          .duration(timeline.image.duration)
+          .delay(timeline.disappear.image.delay)
+          .duration(timeline.disappear.image.duration)
           .attr("opacity", 0);
       }
     }
   }, [
     id,
     section,
-    animations,
+    actions,
     info,
     colors,
     timeline,

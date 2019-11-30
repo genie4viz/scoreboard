@@ -1,62 +1,93 @@
 import React, { useState } from "react";
 import ScoreBoard from "../../components/ScoreBoard";
 
-import team_l_logo from "../../assets/logos/teaml.png";
-import team_r_logo from "../../assets/logos/teamr.png";
-
-const colors = {
-  MASK: '#e0e0df',
-  PAN: '#001236',
-  TIME: '#fefefd',
-  SCORE: '#fefefd',
-  TEAM_L: '#d32119',
-  TEAM_L_TEXT: '#fefefd',
-  TEAM_R: '#fefefd',
-  TEAM_R_TEXT: '#11432f',
-  CARDS_TEXT: '#9ed0d8'
-};
-
-const info = {
-  TIME: "90:00",
-  TEAM_LEFT: {
-    NAME: "Kingston City",
-    ABBR: "KC",
-    SCORE: 0,
-    LOGO: team_l_logo, //team logo img url
-    CARDS: {
-      RED: 0,
-      YELLOW: 1
-    }
-  },
-  TEAM_RIGHT: {
-    NAME: "GUILDFORD CITY",
-    ABBR: "GC",
-    SCORE: 4,
-    LOGO: team_r_logo, //team logo img url
-    CARDS: {
-      RED: 1,
-      YELLOW: 0
-    }
-  }  
-};
-
-const WIDTHS = {
-  DEFAULT: 140,
-  LOGO: 90,
-  NAME: 310,
-  CARDS: 300
-};
+import team1_logo from "../../assets/logos/teaml.png";
+import team2_logo from "../../assets/logos/teamr.png";
 
 function App() {
-  const [anims, setAnims] = useState([{}]);
+  const [anims, setAnims] = useState([]);
 
-  const ChangeState = () => {
-    setAnims([]);
-  }
+  const ChangeState = stat => {
+    switch (stat) {
+      case "hidden":
+        setAnims([]);
+        break;
+      case "main":
+        setAnims([{ animation: "main", delay: 0 }]);
+        break;
+      case "team-stat":
+        setAnims([
+          { animation: "main", delay: 0 },
+          { animation: "teamStat", delay: 0.6 }
+        ]);
+        break;
+      default:
+        return;
+    }
+  };
   return (
-    <div style={{ width: '100wh', minHeight: "100vh", padding: 32, backgroundColor: '#333' }}>
-      <button onClick={ChangeState}>Change State</button>
-      <ScoreBoard animations={anims} info={info} colors={colors} width={1130} height={70} />
+    <div
+      style={{
+        width: "100wh",
+        minHeight: "100vh",
+        padding: 32,
+        backgroundColor: "#333"
+      }}
+    >
+      <button onClick={() => ChangeState("hidden")}>Hidden</button>
+      <button onClick={() => ChangeState("main")}>Main</button>
+      <button onClick={() => ChangeState("team-stat")}>TeamStat</button>
+      <br />
+      <ScoreBoard
+        animations={anims}
+        selectTeam={1}
+        info={{
+          score: "0 - 4",
+          time: "90:00",
+          team1: {
+            abbr: "KC",
+            name: "Kingston City",
+            logo: team1_logo,
+            card: {
+              red: 0,
+              yellow: 0
+            }
+          },
+          team2: {
+            abbr: "GC",
+            name: "Gublin City",
+            logo: team2_logo,
+            card: {
+              red: 1,
+              yellow: 2
+            }
+          }
+        }}
+        colors={{
+          mask: "rgba(0, 0, 0, 0.15)",
+          score: "#fefefd",
+          score_rect: "#001236",
+          time: "#fefefd",
+          time_rect: "#001236",
+          spliter: "#fefefd",
+          team1: {
+            text: "#fefefd",
+            rect: "#d32119"
+          },
+          team2: {
+            text: "#11432f",
+            rect: "#fefefd"
+          },
+          card: {
+            rect: "#001236",
+            desc: "#9ed0d8",
+            red: "#9ed0d8",
+            yellow: "#9ed0d8"
+          }
+        }}
+        width={1130}
+        height={70}
+      />
     </div>
   );
 }
