@@ -19,7 +19,7 @@ export const TextBoard = ({
     let textNode = gBoard.select(".text");
     let imgNode = gBoard.select(".logo");
     let lineNode = gBoard.select(".split");
-
+    
     if (actions === "appear") {
       if (rectNode.empty()) {
         rectNode = gBoard
@@ -140,12 +140,13 @@ export const TextBoard = ({
             ? rectWidth * 0.5
             : 0
         )
-        .attr("width", 0);
+        .attr("width", 0)
+        .remove();
 
       textNode
         .transition()
-        .delay(timeline.disappear.rect.delay)
-        .duration(timeline.disappear.rect.duration)
+        .delay(timeline.disappear.text.delay)
+        .duration(timeline.disappear.text.duration)
         .attr("opacity", 0)
         .attr(
           "x",
@@ -154,20 +155,20 @@ export const TextBoard = ({
             : expandDir === "center"
             ? rectWidth * 0.5
             : rectWidth * 0.45
-        );
+        ).remove();
 
       if (info.image) {
         imgNode
           .transition()
           .delay(timeline.disappear.image.delay)
           .duration(timeline.disappear.image.duration)
-          .attr("opacity", 0);
+          .attr("opacity", 0).remove();
 
         lineNode
           .transition()
           .delay(timeline.disappear.image.delay)
           .duration(timeline.disappear.image.duration)
-          .attr("opacity", 0);
+          .attr("opacity", 0).remove();
       }
     }
   }, [
