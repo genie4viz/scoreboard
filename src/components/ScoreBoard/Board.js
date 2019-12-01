@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import * as d3 from "d3";
 
-export const TextBoard = ({
+export const Board = ({
   id,
   section,
   actions,
@@ -13,13 +13,14 @@ export const TextBoard = ({
   transX,
   expandDir
 }) => {
-  useEffect(() => {
-    const gBoard = d3.select(`.g-textboard-${section}-${id}`);
+  useEffect(() => {    
+    const gBoard = d3.select(`.g-board-${section}-${id}`);
+
     let rectNode = gBoard.select(".rect");
     let textNode = gBoard.select(".text");
     let imgNode = gBoard.select(".logo");
     let lineNode = gBoard.select(".split");
-    
+
     if (actions === "show") {
       if (rectNode.empty()) {
         rectNode = gBoard
@@ -38,6 +39,7 @@ export const TextBoard = ({
           .attr("fill", colors.rect)
           .attr("opacity", 0)
           .transition()
+          .ease(d3.easeSin)
           .delay(timeline.show.rect.delay)
           .duration(timeline.show.rect.duration)
           .attr("x", 0)
@@ -52,13 +54,13 @@ export const TextBoard = ({
           .attr("x", () => {
             switch (expandDir) {
               case "left":
-                return rectWidth * 0.65;
+                return rectWidth * 0.55;
               case "center":
                 return rectWidth * 0.5;
               case "right":
                 return rectWidth * 0.45;
               case "right-with-image":
-                return (rectWidth - 90) * 0.4 + 90; //90 is logoRect width
+                return (rectWidth - 90) * 0.45 + 90; //90 is logoRect width
               default:
                 return;
             }
@@ -70,6 +72,7 @@ export const TextBoard = ({
           .attr("fill", colors.text)
           .attr("opacity", 0)
           .transition()
+          .ease(d3.easeSin)
           .delay(timeline.show.text.delay)
           .duration(timeline.show.text.duration)
           .attr("opacity", 1)
@@ -112,6 +115,7 @@ export const TextBoard = ({
           .attr("height", 50)
           .attr("opacity", 0)
           .transition()
+          .ease(d3.easeSin)
           .delay(timeline.show.image.delay)
           .duration(timeline.show.image.duration)
           .attr("opacity", 1);
@@ -125,6 +129,7 @@ export const TextBoard = ({
           .attr("fill", colors.line)
           .attr("opacity", 0)
           .transition()
+          .ease(d3.easeSin)
           .delay(timeline.show.image.delay)
           .duration(timeline.show.image.duration)
           .attr("opacity", 0.6);
@@ -132,6 +137,7 @@ export const TextBoard = ({
     } else {
       rectNode
         .transition()
+        .ease(d3.easeSin)
         .delay(timeline.hide.rect.delay)
         .duration(timeline.hide.rect.duration)
         .attr(
@@ -148,13 +154,14 @@ export const TextBoard = ({
 
       textNode
         .transition()
+        .ease(d3.easeSin)
         .delay(timeline.hide.text.delay)
         .duration(timeline.hide.text.duration)
         .attr("opacity", 0)
         .attr(
           "x",
           expandDir === "left"
-            ? rectWidth * 0.65
+            ? rectWidth * 0.55
             : expandDir === "center"
             ? rectWidth * 0.5
             : rectWidth * 0.45
@@ -163,12 +170,14 @@ export const TextBoard = ({
       if (info.image) {
         imgNode
           .transition()
+          .ease(d3.easeSin)
           .delay(timeline.hide.image.delay)
           .duration(timeline.hide.image.duration)
           .attr("opacity", 0).remove();
 
         lineNode
           .transition()
+          .ease(d3.easeSin)
           .delay(timeline.hide.image.delay)
           .duration(timeline.hide.image.duration)
           .attr("opacity", 0).remove();
@@ -189,7 +198,7 @@ export const TextBoard = ({
 
   return (
     <g
-      className={`g-textboard-${section}-${id}`}
+      className={`g-board-${section}-${id}`}
       transform={`translate(${transX}, 0)`}
     />
   );

@@ -4,19 +4,37 @@ import ScoreBoard from "../../components/ScoreBoard";
 import team1_logo from "../../assets/logos/teaml.png";
 import team2_logo from "../../assets/logos/teamr.png";
 
-function App() {  
-
+function App() {
   const [animations, setAnimations] = useState(null);
-  
+  const [pending, setPending] = useState(false);
+  const main_delay = 0, team_delay = 0;
+  const duration = 500;
+
   const changeState = value => {
-    if(value === 2){
-      setAnimations([{ animation:'main', delay: 0 }, { animation:'teamStat', delay:0.6 }]);
-    } else if(value === 1) {
-      setAnimations([{ animation:'main', delay: 0 }]);
+    if(pending) return;
+
+    if (value === 2) {      
+      setAnimations([
+        { animation: "main", delay: main_delay },
+        { animation: "teamStat", delay: team_delay }
+      ]);
+      setPending(true);
+      setTimeout(() => {
+        setPending(false);
+      }, (main_delay + team_delay + 4) * duration);
+    } else if (value === 1) {
+      setAnimations([{ animation: "main", delay: main_delay }]);
+      setPending(true);
+      setTimeout(() => {
+        setPending(false);
+      }, (4 + main_delay + team_delay) * duration);
     } else {
       setAnimations([]);
+      setPending(true);
+      setTimeout(() => {
+        setPending(false);
+      }, (4 + main_delay + team_delay) * duration);
     }
-    
   };
 
   return (
@@ -27,13 +45,14 @@ function App() {
         padding: 32,
         backgroundColor: "#333"
       }}
-    >              
+    >
       <button onClick={() => changeState(2)}>Main + TeamState</button>
       <button onClick={() => changeState(1)}>Main</button>
       <button onClick={() => changeState(0)}>Hide</button>
       <br />
       {animations && (
-        <ScoreBoard          
+        <ScoreBoard
+          duration={duration}
           animations={animations}
           selectTeam={1}
           info={{
