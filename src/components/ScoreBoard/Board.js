@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
 export const Board = ({
@@ -13,7 +13,9 @@ export const Board = ({
   transX,
   expandDir
 }) => {
-  useEffect(() => {    
+  const prevAction = useRef(actions);
+  useEffect(() => {
+    
     const gBoard = d3.select(`.g-board-${section}-${id}`);
 
     let rectNode = gBoard.select(".rect");
@@ -22,6 +24,7 @@ export const Board = ({
     let lineNode = gBoard.select(".split");
 
     if (actions === "show") {
+      
       if (rectNode.empty()) {
         rectNode = gBoard
           .append("rect")
@@ -38,10 +41,10 @@ export const Board = ({
           .attr("height", rectHeight)
           .attr("fill", colors.rect)
           .attr("opacity", 0)
-          .transition()
+          .transition("show")
           .ease(d3.easeSin)
           .delay(timeline.show.rect.delay)
-          .duration(timeline.show.rect.duration)
+          .duration(timeline.show.rect.duration)          
           .attr("x", 0)
           .attr("opacity", 1)
           .attr("width", rectWidth);
@@ -71,7 +74,7 @@ export const Board = ({
           .attr("font-size", expandDir === "center" ? 54 : 40)
           .attr("fill", colors.text)
           .attr("opacity", 0)
-          .transition()
+          .transition("show")
           .ease(d3.easeSin)
           .delay(timeline.show.text.delay)
           .duration(timeline.show.text.duration)
@@ -114,7 +117,7 @@ export const Board = ({
           .attr("width", 50)
           .attr("height", 50)
           .attr("opacity", 0)
-          .transition()
+          .transition("show")
           .ease(d3.easeSin)
           .delay(timeline.show.image.delay)
           .duration(timeline.show.image.duration)
@@ -128,16 +131,17 @@ export const Board = ({
           .attr("height", rectHeight)
           .attr("fill", colors.line)
           .attr("opacity", 0)
-          .transition()
+          .transition("show")
           .ease(d3.easeSin)
           .delay(timeline.show.image.delay)
           .duration(timeline.show.image.duration)
           .attr("opacity", 0.6);
       }
     } else {
+      
       rectNode
-        .transition()
-        .ease(d3.easeSin)
+        .transition("hide")
+        .ease(d3.easeSin)        
         .delay(timeline.hide.rect.delay)
         .duration(timeline.hide.rect.duration)
         .attr(
@@ -152,8 +156,12 @@ export const Board = ({
         .attr("width", 0)
         .remove();
 
+      if(prevAction.current !== actions){
+        rectNode.interrupt();  
+      }
+
       textNode
-        .transition()
+        .transition("hide")
         .ease(d3.easeSin)
         .delay(timeline.hide.text.delay)
         .duration(timeline.hide.text.duration)
@@ -169,20 +177,21 @@ export const Board = ({
 
       if (info.image) {
         imgNode
-          .transition()
+          .transition("hide")
           .ease(d3.easeSin)
           .delay(timeline.hide.image.delay)
           .duration(timeline.hide.image.duration)
           .attr("opacity", 0).remove();
 
         lineNode
-          .transition()
+          .transition("hide")
           .ease(d3.easeSin)
           .delay(timeline.hide.image.delay)
           .duration(timeline.hide.image.duration)
           .attr("opacity", 0).remove();
       }
     }
+    prevAction.current = actions;
   }, [
     id,
     section,
