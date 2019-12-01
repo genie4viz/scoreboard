@@ -1,25 +1,22 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import ScoreBoard from "../../components/ScoreBoard";
 
 import team1_logo from "../../assets/logos/teaml.png";
 import team2_logo from "../../assets/logos/teamr.png";
 
-function App() {
-  const mainDelayRef = useRef();
-  const teamDelayRef = useRef();
+function App() {  
 
-  const [anims, setAnims] = useState(null);
+  const [animations, setAnimations] = useState(null);
   
-  const showBoard = () => {    
+  const changeState = value => {
+    if(value === 2){
+      setAnimations([{ animation:'main', delay: 0 }, { animation:'teamStat', delay:0.6 }]);
+    } else if(value === 1) {
+      setAnimations([{ animation:'main', delay: 0 }]);
+    } else {
+      setAnimations([]);
+    }
     
-    setAnims({
-      main: parseInt(mainDelayRef.current.value) * 1000,
-      teamStat: parseInt(teamDelayRef.current.value) * 1000
-    });
-  };
-
-  const hideBoard = () => {    
-    setAnims([]); //hidden
   };
 
   return (
@@ -30,23 +27,14 @@ function App() {
         padding: 32,
         backgroundColor: "#333"
       }}
-    >
-      <label htmlFor="main-delay" style={{ color: "white" }}>
-        Main delay(seconds)
-      </label>
-      <input id="main-delay" ref={mainDelayRef} defaultValue="2" />
+    >              
+      <button onClick={() => changeState(2)}>Main + TeamState</button>
+      <button onClick={() => changeState(1)}>Main</button>
+      <button onClick={() => changeState(0)}>Hide</button>
       <br />
-      <label htmlFor="team-delay" style={{ color: "white" }}>
-        TeamStat delay(seconds)
-      </label>
-      <input id="team-delay" ref={teamDelayRef} defaultValue="1" />
-      <br />
-      <button onClick={showBoard}>Show</button>
-      <button onClick={hideBoard}>Hidden</button>
-      <br />
-      {anims && (
+      {animations && (
         <ScoreBoard          
-          animations={anims}
+          animations={animations}
           selectTeam={1}
           info={{
             score: "0 - 4",

@@ -20,7 +20,7 @@ export const TextBoard = ({
     let imgNode = gBoard.select(".logo");
     let lineNode = gBoard.select(".split");
     
-    if (actions === "appear") {
+    if (actions === "show") {
       if (rectNode.empty()) {
         rectNode = gBoard
           .append("rect")
@@ -36,10 +36,12 @@ export const TextBoard = ({
           .attr("width", 0)
           .attr("height", rectHeight)
           .attr("fill", colors.rect)
+          .attr("opacity", 0)
           .transition()
-          .delay(timeline.appear.rect.delay)
-          .duration(timeline.appear.rect.duration)
+          .delay(timeline.show.rect.delay)
+          .duration(timeline.show.rect.duration)
           .attr("x", 0)
+          .attr("opacity", 1)
           .attr("width", rectWidth);
       }
 
@@ -64,14 +66,14 @@ export const TextBoard = ({
           .attr("y", rectHeight / 2)
           .attr("text-anchor", "middle")
           .attr("font-weight", expandDir === "center" ? 1000 : "bold")
-          .attr("font-size", expandDir === "center" ? 32 : 40)
+          .attr("font-size", expandDir === "center" ? 54 : 40)
           .attr("fill", colors.text)
           .attr("opacity", 0)
           .transition()
-          .delay(timeline.appear.text.delay)
-          .duration(timeline.appear.text.duration)
+          .delay(timeline.show.text.delay)
+          .duration(timeline.show.text.duration)
           .attr("opacity", 1)
-          .attr("font-size", expandDir === "center" ? 46 : 40)
+          .attr("font-size", 40)
           .attr(
             "x",
             expandDir === "right-with-image"
@@ -110,8 +112,8 @@ export const TextBoard = ({
           .attr("height", 50)
           .attr("opacity", 0)
           .transition()
-          .delay(timeline.appear.image.delay)
-          .duration(timeline.appear.image.duration)
+          .delay(timeline.show.image.delay)
+          .duration(timeline.show.image.duration)
           .attr("opacity", 1);
 
         lineNode = gBoard
@@ -123,15 +125,15 @@ export const TextBoard = ({
           .attr("fill", colors.line)
           .attr("opacity", 0)
           .transition()
-          .delay(timeline.appear.image.delay)
-          .duration(timeline.appear.image.duration)
+          .delay(timeline.show.image.delay)
+          .duration(timeline.show.image.duration)
           .attr("opacity", 0.6);
       }
     } else {
       rectNode
         .transition()
-        .delay(timeline.disappear.rect.delay)
-        .duration(timeline.disappear.rect.duration)
+        .delay(timeline.hide.rect.delay)
+        .duration(timeline.hide.rect.duration)
         .attr(
           "x",
           expandDir === "left"
@@ -140,13 +142,14 @@ export const TextBoard = ({
             ? rectWidth * 0.5
             : 0
         )
+        .attr("opacity", 0)
         .attr("width", 0)
         .remove();
 
       textNode
         .transition()
-        .delay(timeline.disappear.text.delay)
-        .duration(timeline.disappear.text.duration)
+        .delay(timeline.hide.text.delay)
+        .duration(timeline.hide.text.duration)
         .attr("opacity", 0)
         .attr(
           "x",
@@ -160,14 +163,14 @@ export const TextBoard = ({
       if (info.image) {
         imgNode
           .transition()
-          .delay(timeline.disappear.image.delay)
-          .duration(timeline.disappear.image.duration)
+          .delay(timeline.hide.image.delay)
+          .duration(timeline.hide.image.duration)
           .attr("opacity", 0).remove();
 
         lineNode
           .transition()
-          .delay(timeline.disappear.image.delay)
-          .duration(timeline.disappear.image.duration)
+          .delay(timeline.hide.image.delay)
+          .duration(timeline.hide.image.duration)
           .attr("opacity", 0).remove();
       }
     }

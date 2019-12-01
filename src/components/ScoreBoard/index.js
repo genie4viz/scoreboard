@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { TextBoard } from "./textBoard";
-
-const spd = 3;
 
 const W = {
   default: 140,
@@ -13,6 +11,9 @@ const W = {
   card: 300
 };
 
+const spd = 10;
+const duration = 50 * spd;
+
 const ScoreBoard = ({
   reset,
   animations,
@@ -22,44 +23,59 @@ const ScoreBoard = ({
   width,
   height
 }) => {
+  console.log(animations, "animations");
 
-  const parseAnimation = animations => {
-    let arr = [];
-    for (let ani in animations) {
-      arr.push({ action: ani, delay: animations[ani] });
-    }    
-    return arr;
-  };
-  const actions = parseAnimation(animations);
-  const [showTeamStat, setShowTeamStat] = useState(false);
-  useEffect(() => {
-    setShowTeamStat(false);
-  }, [animations]);
+  let t_score_show_delay,
+    t_abbr_show_delay,
+    t_time_show_delay,
+    t_score_hide_delay,
+    t_abbr_hide_delay,
+    t_time_hide_delay,
+    t_team_show_delay,
+    t_card_show_delay,
+    t_team_hide_delay,
+    t_card_hide_delay,
+    main_delay = 0, team_delay = 0;
 
-  useEffect(() => {
-    
-    setTimeout(() => {
-      setShowTeamStat(true);
-    }, actions[0] && actions[1]  ? actions[0].delay + actions[1].delay + (450 + 350 + 100 + 250) * spd : (450 + 350 + 100 + 250) * spd);
-    
-  }, [showTeamStat, actions]);
+  if( animations.length === 2){
+    main_delay = animations[0].delay;
+    team_delay = animations[1].delay;
+  } else if( animations.length === 1) {
+    main_delay = animations[0].delay;
+  }
+
+  t_score_show_delay = main_delay * duration;
+  t_abbr_show_delay = (main_delay + 1) * duration;
+  t_time_show_delay = (main_delay + 2) * duration;
+
+  t_score_hide_delay = 2 * duration;
+  t_abbr_hide_delay = duration;
+  t_time_hide_delay = 0;
+
+  t_team_show_delay =
+    (main_delay + team_delay + 2) * duration;
+  t_card_show_delay =
+    (main_delay + team_delay + 2.5) * duration;
+
+  t_team_hide_delay = duration / 2;
+  t_card_hide_delay = 0;
 
   return (
     <svg width={width} height={height}>
       <TextBoard
         id="team-left-abbr"
         section="main"
-        actions={actions.length > 0 ? "appear" : "disappear"}
+        actions={animations.length > 0 ? "show" : "hide"}
         info={{ text: info.team1.abbr }}
         colors={{ rect: colors.team1.rect, text: colors.team1.text }}
         timeline={{
-          appear: {
-            rect: { delay: actions[0] ? actions[0].delay + 150 * spd :  150 * spd, duration: 200 * spd },
-            text: { delay: actions[0] ? actions[0].delay + 200 * spd : 200 * spd, duration: 350 * spd }
+          show: {
+            rect: { delay: t_abbr_show_delay, duration: duration },
+            text: { delay: t_abbr_show_delay, duration: duration }
           },
-          disappear: {
-            rect: { delay: showTeamStat ? 700 * spd : 450 * spd, duration: 200 * spd },
-            text: { delay: showTeamStat ? 700 * spd : 400 * spd, duration: 200 * spd }
+          hide: {
+            rect: { delay: t_abbr_hide_delay, duration: duration },
+            text: { delay: t_abbr_hide_delay, duration: duration }
           }
         }}
         rectWidth={W.default}
@@ -70,17 +86,17 @@ const ScoreBoard = ({
       <TextBoard
         id="team-right-abbr"
         section="main"
-        actions={actions.length > 0 ? "appear" : "disappear"}
+        actions={animations.length > 0 ? "show" : "hide"}
         info={{ text: info.team2.abbr }}
         colors={{ rect: colors.team2.rect, text: colors.team2.text }}
         timeline={{
-          appear: {
-            rect: { delay: actions[0] ? actions[0].delay + 150 * spd : 150 * spd, duration: 200 * spd },
-            text: { delay: actions[0] ? actions[0].delay + 200 * spd : 200 * spd, duration: 350 * spd }
+          show: {
+            rect: { delay: t_abbr_show_delay, duration: duration },
+            text: { delay: t_abbr_show_delay, duration: duration }
           },
-          disappear: {
-            rect: { delay: showTeamStat ? 700 * spd : 450 * spd, duration: 200 * spd },
-            text: { delay: showTeamStat ? 700 * spd : 400 * spd, duration: 200 * spd }
+          hide: {
+            rect: { delay: t_abbr_hide_delay, duration: duration },
+            text: { delay: t_abbr_hide_delay, duration: duration }
           }
         }}
         rectWidth={W.default}
@@ -91,17 +107,17 @@ const ScoreBoard = ({
       <TextBoard
         id="vs-score-mask"
         section="main"
-        actions={actions.length > 0 ? "appear" : "disappear"}
+        actions={animations.length > 0 ? "show" : "hide"}
         info={{ text: "" }}
         colors={{ rect: colors.mask, text: "#fefefd" }}
         timeline={{
-          appear: {
-            rect: { delay: actions[0] ? actions[0].delay + 150 * spd :  150 * spd, duration: 200 * spd },
-            text: { delay: actions[0] ? actions[0].delay + 200 * spd :  200 * spd, duration: 350 * spd }
+          show: {
+            rect: { delay: t_score_show_delay, duration: duration * 1.5 },
+            text: { delay: t_score_show_delay, duration: duration * 1.5 }
           },
-          disappear: {
-            rect: { delay: showTeamStat ? 800 * spd : 650 * spd, duration: 200 * spd },
-            text: { delay: showTeamStat ? 800 * spd : 600 * spd, duration: 350 * spd }
+          hide: {
+            rect: { delay: t_score_hide_delay, duration: duration * 1.5 },
+            text: { delay: t_score_hide_delay, duration: duration * 1.5 }
           }
         }}
         rectWidth={W.mask}
@@ -112,17 +128,17 @@ const ScoreBoard = ({
       <TextBoard
         id="vs-score"
         section="main"
-        actions={actions.length > 0 ? "appear" : "disappear"}
+        actions={animations.length > 0 ? "show" : "hide"}
         info={{ text: info.score }}
         colors={{ rect: colors.score_rect, text: colors.score }}
         timeline={{
-          appear: {
-            rect: { delay: actions[0] ? actions[0].delay + 0 * spd : 0 * spd, duration: 200 * spd },
-            text: { delay: actions[0] ? actions[0].delay + 100 * spd : 100 * spd, duration: 350 * spd }
+          show: {
+            rect: { delay: t_score_show_delay, duration: duration },
+            text: { delay: t_score_show_delay, duration: duration }
           },
-          disappear: {
-            rect: { delay: showTeamStat ? 800 * spd : 600 * spd, duration: 200 * spd },
-            text: { delay: showTeamStat ? 800 * spd : 500 * spd, duration: 100 * spd }
+          hide: {
+            rect: { delay: t_score_hide_delay, duration: duration },
+            text: { delay: t_score_hide_delay, duration: duration }
           }
         }}
         rectWidth={W.default}
@@ -133,17 +149,17 @@ const ScoreBoard = ({
       <TextBoard
         id="time"
         section="main"
-        actions={actions.length > 0 && !showTeamStat ? "appear" : "disappear"}
+        actions={animations.length === 1 ? "show" : "hide"}
         info={{ text: info.time }}
         colors={{ rect: colors.time_rect, text: colors.time }}
         timeline={{
-          appear: {
-            rect: { delay: actions[0] ? actions[0].delay + 450 * spd : 450 * spd, duration: 200 * spd },
-            text: { delay: actions[0] ? actions[0].delay + 550 * spd: 550 * spd, duration: 350 * spd }
+          show: {
+            rect: { delay: t_time_show_delay, duration: duration },
+            text: { delay: t_time_show_delay, duration: duration }
           },
-          disappear: {
-            rect: { delay: 100 * spd, duration: 200 * spd },
-            text: { delay: 0 * spd, duration: 250 * spd }
+          hide: {
+            rect: { delay: t_time_hide_delay, duration: duration },
+            text: { delay: t_time_hide_delay, duration: duration }
           }
         }}
         rectWidth={W.time}
@@ -154,7 +170,7 @@ const ScoreBoard = ({
       <TextBoard
         id="team-detail"
         section="team-state"
-        actions={showTeamStat && actions.length > 1 ? "appear" : "disappear"}
+        actions={animations.length > 1 ? "show" : "hide"}
         info={{
           text: selectTeam === 1 ? info.team1.name : info.team2.name,
           image: selectTeam === 1 ? info.team1.logo : info.team2.logo
@@ -165,15 +181,15 @@ const ScoreBoard = ({
           line: colors.spliter
         }}
         timeline={{
-          appear: {
-            rect: { delay: 350 * spd, duration: 200 * spd },
-            text: { delay: 350 * spd, duration: 350 * spd },
-            image: { delay: 350 * spd, duration: 350 * spd }
+          show: {
+            rect: { delay: t_team_show_delay, duration: duration },
+            text: { delay: t_team_show_delay, duration: duration },
+            image: { delay: t_team_show_delay, duration: duration }
           },
-          disappear: {
-            rect: { delay: 300 * spd, duration: 300 * spd },
-            text: { delay: 300 * spd, duration: 250 * spd },
-            image: { delay: 300 * spd, duration: 250 * spd }
+          hide: {
+            rect: { delay: t_team_hide_delay, duration: duration },
+            text: { delay: t_team_hide_delay, duration: duration },
+            image: { delay: t_team_hide_delay, duration: duration }
           }
         }}
         rectWidth={W.team_detail}
@@ -184,7 +200,7 @@ const ScoreBoard = ({
       <TextBoard
         id="cards"
         section="team-state"
-        actions={showTeamStat && actions.length > 1 ? "appear" : "disappear"}
+        actions={animations.length > 1 ? "show" : "hide"}
         info={{
           text: `Red cards`,
           text_next: `${
@@ -197,15 +213,15 @@ const ScoreBoard = ({
           text_next: colors.card.red
         }}
         timeline={{
-          appear: {
-            rect: { delay: 450 * spd, duration: 200 * spd },
-            text: { delay: 500 * spd, duration: 350 * spd },
-            text_next: { delay: 500 * spd, duration: 350 * spd }
+          show: {
+            rect: { delay: t_card_show_delay, duration: duration },
+            text: { delay: t_card_show_delay, duration: duration },
+            text_next: { delay: t_card_show_delay, duration: duration }
           },
-          disappear: {
-            rect: { delay: 150 * spd, duration: 200 * spd },
-            text: { delay: 0 * spd, duration: 150 * spd },
-            text_next: { delay: 0 * spd, duration: 150 * spd }
+          hide: {
+            rect: { delay: t_card_hide_delay, duration: duration },
+            text: { delay: t_card_hide_delay, duration: duration },
+            text_next: { delay: t_card_hide_delay, duration: duration }
           }
         }}
         rectWidth={W.card}
